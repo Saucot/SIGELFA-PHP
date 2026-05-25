@@ -569,3 +569,32 @@ BEGIN
     PRINT 'La tabla EventoPartido ya existe.';
 END
 GO
+
+
+
+
+
+/* ============================================================
+   Tipos de eventos de partido
+   ============================================================ */
+IF NOT EXISTS (SELECT 1 FROM dbo.TipoEventoPartido)
+BEGIN
+    INSERT INTO dbo.TipoEventoPartido (
+        nombreEvento,
+        abreviatura,
+        afectaMarcador
+    )
+    VALUES
+        (N'Gol', 'GOL', 1),
+        (N'Autogol', 'AUTOGOL', 1),
+        (N'Tarjeta amarilla', 'AMARILLA', 0),
+        (N'Tarjeta roja', 'ROJA', 0),
+        (N'Observación', 'OBS', 0);
+
+    PRINT 'Tipos de eventos insertados.';
+END
+ELSE
+BEGIN
+    PRINT 'Los tipos de eventos ya existen.';
+END
+GO
