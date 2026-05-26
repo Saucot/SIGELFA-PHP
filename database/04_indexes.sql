@@ -136,4 +136,4 @@ WHERE nomCortoCat = 'LIB'
   AND perTorneo = '2026A'
   AND cveLiga = 'LAF'
 ORDER BY nombEquipo;
-GO
+GO  
