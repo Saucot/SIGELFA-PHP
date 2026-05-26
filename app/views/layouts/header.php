@@ -2,14 +2,10 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
-
     <title>SIGELFA</title>
-
-    <link rel="stylesheet"
-    href="/SIGELFA-PHP/public/assets/css/style.css">
-
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
 <body>
+

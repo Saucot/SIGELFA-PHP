@@ -1,14 +1,14 @@
 <div class="sidebar">
 
     <div class="logo">
-        <h2>⚽ SIGELFA</h2>
-        <p>Sistema Liga Fútbol</p>
+        <h2>SIGELFA</h2>
+        <p>Sistema Liga Futbol</p>
     </div>
 
     <ul class="menu">
 
         <li>
-            <a href="/SIGELFA-PHP/public/index.php">
+            <a href="/">
                 Dashboard
             </a>
         </li>
@@ -39,10 +39,11 @@
 
         <li>
             <a href="#">
-                Árbitros
+                Arbitros
             </a>
         </li>
 
     </ul>
 
 </div>
+

@@ -1,50 +1,104 @@
 # SIGELFA-PHP
 
-Sistema gestor de liga de fútbol amateur desarrollado con PHP 8.x y SQL Server.
+Sistema gestor de liga de futbol amateur desarrollado con PHP 8.x y SQL Server.
 
-## Objetivo
+## Ejecucion oficial
 
-SIGELFA tiene como objetivo administrar información relacionada con una liga de fútbol amateur, como equipos, jugadores, partidos, usuarios, roles, reportes y auditoría.
+La forma oficial de ejecutar el proyecto es con el servidor integrado de PHP desde la raiz del repositorio:
 
-El alcance exacto del sistema se definirá por fases conforme avance el proyecto escolar.
+```powershell
+php -S localhost:8000 -t public
+```
 
-## Tecnologías
+Despues abre:
 
-- PHP 8.4
-- SQL Server
-- HTML
-- CSS
-- JavaScript básico
-- Git y GitHub
-- VS Code
-- Servidor integrado de PHP
+```text
+http://localhost:8000
+```
 
-## Estructura inicial
+Laragon puede usarse como herramienta local opcional, pero el proyecto no debe depender de rutas, hosts ni URLs de Laragon.
+
+## Configuracion local
+
+Cada integrante debe crear su propio archivo `.env` a partir de la plantilla:
+
+```powershell
+copy .env.example .env
+```
+
+El archivo `.env` no se sube a Git. No escribas credenciales reales en `.env.example`, archivos PHP, SQL, Markdown o JSON.
+
+Ejemplo para Windows Authentication:
+
+```env
+APP_NAME=SIGELFA
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=sqlsrv
+DB_HOST=localhost
+DB_PORT=1433
+DB_DATABASE=SIGELFA_DB
+DB_USERNAME=
+DB_PASSWORD=
+DB_TRUSTED_CONNECTION=true
+DB_TRUST_SERVER_CERTIFICATE=true
+```
+
+`DB_HOST` puede ser `localhost`, `LAPTOP-B8PBME2K`, `.\SQLEXPRESS` o `localhost\SQLEXPRESS`, segun el nombre del servidor en SQL Server Management Studio.
+
+Para SQL Server Authentication, usa `DB_TRUSTED_CONNECTION=false` y define `DB_USERNAME` y `DB_PASSWORD` solo en tu `.env` local.
+
+## Verificar PHP y drivers SQL Server
+
+Para saber que PHP se esta usando:
+
+```powershell
+where php
+php --ini
+```
+
+Para verificar drivers de SQL Server:
+
+```powershell
+php -m | findstr /I "sqlsrv pdo_sqlsrv"
+```
+
+El resultado esperado debe incluir:
+
+```text
+pdo_sqlsrv
+sqlsrv
+```
+
+## Rutas utiles
+
+```text
+http://localhost:8000
+http://localhost:8000/test_conexion.php
+```
+
+`test_conexion.php` solo debe funcionar cuando `APP_DEBUG=true`.
+
+## Estructura base
 
 ```text
 SIGELFA-PHP/
-├── app/
-│   ├── config/
-│   ├── controllers/
-│   ├── models/
-│   ├── views/
-│   └── helpers/
-├── public/
-│   ├── index.php
-│   └── assets/
-│       ├── css/
-│       ├── js/
-│       └── img/
-├── database/
-│   ├── schema.sql
-│   ├── seed.sql
-│   └── queries.sql
-├── docs/
-│   ├── instalacion.md
-│   ├── base-de-datos.md
-│   ├── manual-usuario.md
-│   └── estructura-proyecto.md
-├── .env.example
-├── .gitignore
-├── README.md
-└── composer.json
+|-- app/
+|   |-- config/
+|   |-- controllers/
+|   |-- helpers/
+|   |-- models/
+|   `-- views/
+|-- public/
+|   |-- index.php
+|   `-- assets/
+|-- database/
+|-- docs/
+|-- .env.example
+|-- .gitignore
+|-- README.md
+`-- composer.json
+```
+

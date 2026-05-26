@@ -1,22 +1,29 @@
 <?php
 require_once __DIR__ . '/../app/models/Database.php';
+require_once __DIR__ . '/../app/helpers/security.php';
 
-$database = new Database();
-$db = $database->getConnection();
+$equipos = [];
+$error = null;
 
-/* Consulta de equipos */
-$query = "SELECT
-            cveEquipo,
-            nombEquipo,
-            nombRepEq,
-            numTelRepEq
-          FROM Equipo
-          ORDER BY nombEquipo";
+try {
+    $database = new Database();
+    $db = $database->getConnection();
 
-$stmt = $db->prepare($query);
-$stmt->execute();
+    $query = "SELECT
+                cveEquipo,
+                nombEquipo,
+                nombRepEq,
+                numTelRepEq
+              FROM Equipo
+              ORDER BY nombEquipo";
 
-$equipos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $equipos = $stmt->fetchAll();
+} catch (PDOException $exception) {
+    error_log('SIGELFA equipos query error: ' . $exception->getMessage());
+    $error = 'No se pudieron cargar los equipos. Verifica la configuracion local.';
+}
 ?>
 
 <!DOCTYPE html>
@@ -25,68 +32,61 @@ $equipos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIGELFA</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="/SIGELFA-PHP/public/assets/css/style.css">
-
-    <!-- Fuente moderna -->
+    <link rel="stylesheet" href="/assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div class="container">
 
-        <!-- Header -->
         <div class="header">
             <div>
-                <h1>⚽ SIGELFA</h1>
-                <p>Sistema de Gestión de Liga de Fútbol Amateur</p>
+                <h1>SIGELFA</h1>
+                <p>Sistema de Gestion de Liga de Futbol Amateur</p>
             </div>
 
-            <button class="btn">
+            <button class="btn" type="button">
                 + Nuevo Equipo
             </button>
         </div>
 
-        <!-- Card -->
         <div class="card">
 
             <div class="card-header">
                 <h2>Equipos registrados</h2>
 
                 <span>
-                    <?php echo count($equipos); ?> equipos
+                    <?php echo h(count($equipos)); ?> equipos
                 </span>
             </div>
 
-            <!-- Tabla -->
-            <table>
+            <?php if ($error !== null): ?>
+                <p><?php echo h($error); ?></p>
+            <?php elseif (count($equipos) === 0): ?>
+                <p>No hay equipos registrados.</p>
+            <?php else: ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Equipo</th>
+                            <th>Representante</th>
+                            <th>Telefono</th>
+                        </tr>
+                    </thead>
 
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Equipo</th>
-                        <th>Representante</th>
-                        <th>Teléfono</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                <?php foreach($equipos as $equipo): ?>
-
-                    <tr>
-                        <td><?php echo $equipo['cveEquipo']; ?></td>
-                        <td><?php echo $equipo['nombEquipo']; ?></td>
-                        <td><?php echo $equipo['nombRepEq']; ?></td>
-                        <td><?php echo $equipo['numTelRepEq']; ?></td>
-                    </tr>
-
-                <?php endforeach; ?>
-
-                </tbody>
-
-            </table>
+                    <tbody>
+                    <?php foreach($equipos as $equipo): ?>
+                        <tr>
+                            <td><?php echo h($equipo['cveEquipo'] ?? ''); ?></td>
+                            <td><?php echo h($equipo['nombEquipo'] ?? ''); ?></td>
+                            <td><?php echo h($equipo['nombRepEq'] ?? ''); ?></td>
+                            <td><?php echo h($equipo['numTelRepEq'] ?? ''); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
 
         </div>
 
@@ -94,3 +94,4 @@ $equipos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </body>
 </html>
+
