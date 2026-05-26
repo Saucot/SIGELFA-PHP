@@ -148,6 +148,7 @@ Orden base:
 06_stored_procedures.sql
 05_roles_users.sql
 07_test_cedula_arbitral.sql
+08_auth_schema.sql
 ```
 
 Nota: `05_roles_users.sql` concede permisos sobre procedimientos almacenados. Por eso, para una instalacion limpia, conviene crear primero los procedimientos con `06_stored_procedures.sql` y despues aplicar permisos.
@@ -161,8 +162,39 @@ Nota: `05_roles_users.sql` concede permisos sobre procedimientos almacenados. Po
 - `06_stored_procedures.sql`: crea procedimientos almacenados.
 - `05_roles_users.sql`: crea roles y permisos.
 - `07_test_cedula_arbitral.sql`: prueba cedula arbitral y eventos.
+- `08_auth_schema.sql`: crea tablas de usuarios de aplicacion para login y roles de interfaz.
 
-## 8. Probar la aplicacion
+## 8. Autenticacion de aplicacion
+
+Despues de ejecutar `08_auth_schema.sql`, crear usuarios manualmente en SQL Server. No subir contrasenas reales al repositorio.
+
+Generar un hash local desde consola:
+
+```powershell
+php tools/generar_hash.php "PasswordTemporal123"
+```
+
+Ejemplo de insercion manual con un hash generado localmente:
+
+```sql
+INSERT INTO dbo.Usuario (nombreUsuario, email, passwordHash, rol)
+VALUES (N'Gerente de prueba', 'gerente@example.test', 'HASH_GENERADO_LOCALMENTE', 'GERENTE');
+```
+
+Roles disponibles:
+
+- `GERENTE`: acceso general.
+- `ASISTENTE`: gestion general y partidos.
+- `ARBITRO`: partidos y cedulas.
+
+Para usuario arbitro, relacionar el usuario con un arbitro existente:
+
+```sql
+INSERT INTO dbo.UsuarioArbitro (idUsuario, numArb)
+VALUES (ID_DEL_USUARIO, 'A001');
+```
+
+## 9. Probar la aplicacion
 
 Desde la raiz:
 
@@ -188,7 +220,7 @@ Resultado esperado:
 - La prueba muestra conexion exitosa y nombre de base actual.
 - No se muestran usuarios, passwords ni DSN completo.
 
-## 9. Errores comunes
+## 10. Errores comunes
 
 ### No aparecen sqlsrv ni pdo_sqlsrv
 
@@ -215,7 +247,7 @@ Revisar:
 
 La tabla no existe o se esta usando otra base. Revisar que se haya ejecutado `02_schema.sql` contra `SIGELFA_DB`.
 
-## 10. Seguridad
+## 11. Seguridad
 
 - No subir `.env`.
 - No imprimir valores reales de `.env`.
@@ -223,4 +255,6 @@ La tabla no existe o se esta usando otra base. Revisar que se haya ejecutado `02
 - Usar consultas preparadas.
 - Escapar salida HTML con `htmlspecialchars`.
 - Usar `test_conexion.php` solo en local con `APP_DEBUG=true`.
+- Crear hashes con `password_hash` y verificar login con `password_verify`.
+- No guardar contrasenas en texto plano.
 

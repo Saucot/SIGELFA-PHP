@@ -1,97 +1,90 @@
 <?php
-require_once __DIR__ . '/../app/models/Database.php';
-require_once __DIR__ . '/../app/helpers/security.php';
 
-$equipos = [];
-$error = null;
+require_once __DIR__ . '/../app/helpers/auth.php';
+require_once __DIR__ . '/../app/controllers/AuthController.php';
+require_once __DIR__ . '/../app/controllers/EquipoController.php';
+require_once __DIR__ . '/../app/controllers/JugadorController.php';
+require_once __DIR__ . '/../app/controllers/ArbitroController.php';
+require_once __DIR__ . '/../app/controllers/PartidoController.php';
 
-try {
-    $database = new Database();
-    $db = $database->getConnection();
+$controller = $_GET['controller'] ?? 'equipos';
+$action = $_GET['action'] ?? 'index';
 
-    $query = "SELECT
-                cveEquipo,
-                nombEquipo,
-                nombRepEq,
-                numTelRepEq
-              FROM Equipo
-              ORDER BY nombEquipo";
+$controllers = [
+    'auth' => [
+        'class' => AuthController::class,
+        'actions' => ['loginForm', 'login', 'logout'],
+        'post' => [],
+        'redirect' => '/?controller=auth&action=login',
+        'public' => ['loginForm', 'login', 'logout'],
+        'roles' => [],
+    ],
+    'equipos' => [
+        'class' => EquipoController::class,
+        'actions' => ['index', 'create', 'store', 'show', 'edit', 'update', 'deactivate'],
+        'post' => ['store', 'update', 'deactivate'],
+        'redirect' => '/?controller=equipos&action=index',
+        'public' => [],
+        'roles' => ['GERENTE', 'ASISTENTE'],
+    ],
+    'jugadores' => [
+        'class' => JugadorController::class,
+        'actions' => ['index', 'create', 'store', 'show', 'edit', 'update'],
+        'post' => ['store', 'update'],
+        'redirect' => '/?controller=jugadores&action=index',
+        'public' => [],
+        'roles' => ['GERENTE', 'ASISTENTE'],
+    ],
+    'arbitros' => [
+        'class' => ArbitroController::class,
+        'actions' => ['index', 'create', 'store', 'show', 'edit', 'update'],
+        'post' => ['store', 'update'],
+        'redirect' => '/?controller=arbitros&action=index',
+        'public' => [],
+        'roles' => ['GERENTE', 'ASISTENTE'],
+    ],
+    'partidos' => [
+        'class' => PartidoController::class,
+        'actions' => ['index', 'show', 'capturarCedula', 'guardarCedula', 'agregarEvento', 'guardarEvento'],
+        'post' => ['guardarCedula', 'guardarEvento'],
+        'redirect' => '/?controller=partidos&action=index',
+        'public' => [],
+        'roles' => ['GERENTE', 'ASISTENTE', 'ARBITRO'],
+    ],
+];
 
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-    $equipos = $stmt->fetchAll();
-} catch (PDOException $exception) {
-    error_log('SIGELFA equipos query error: ' . $exception->getMessage());
-    $error = 'No se pudieron cargar los equipos. Verifica la configuracion local.';
+if (!isset($controllers[$controller])) {
+    http_response_code(404);
+    echo 'Modulo no encontrado.';
+    exit;
 }
-?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGELFA</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
+$controllerConfig = $controllers[$controller];
 
-    <div class="container">
+if (!in_array($action, $controllerConfig['actions'], true)) {
+    http_response_code(404);
+    echo 'Accion no encontrada.';
+    exit;
+}
 
-        <div class="header">
-            <div>
-                <h1>SIGELFA</h1>
-                <p>Sistema de Gestion de Liga de Futbol Amateur</p>
-            </div>
+$isPublicAction = in_array($action, $controllerConfig['public'] ?? [], true);
 
-            <button class="btn" type="button">
-                + Nuevo Equipo
-            </button>
-        </div>
+if (!$isPublicAction) {
+    auth_require_role($controllerConfig['roles'] ?? []);
+}
 
-        <div class="card">
+$controllerClass = $controllerConfig['class'];
+$controllerInstance = new $controllerClass();
 
-            <div class="card-header">
-                <h2>Equipos registrados</h2>
+if (!method_exists($controllerInstance, $action)) {
+    http_response_code(404);
+    echo 'Accion no encontrada.';
+    exit;
+}
 
-                <span>
-                    <?php echo h(count($equipos)); ?> equipos
-                </span>
-            </div>
+if (in_array($action, $controllerConfig['post'], true) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ' . $controllerConfig['redirect']);
+    exit;
+}
 
-            <?php if ($error !== null): ?>
-                <p><?php echo h($error); ?></p>
-            <?php elseif (count($equipos) === 0): ?>
-                <p>No hay equipos registrados.</p>
-            <?php else: ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Equipo</th>
-                            <th>Representante</th>
-                            <th>Telefono</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    <?php foreach($equipos as $equipo): ?>
-                        <tr>
-                            <td><?php echo h($equipo['cveEquipo'] ?? ''); ?></td>
-                            <td><?php echo h($equipo['nombEquipo'] ?? ''); ?></td>
-                            <td><?php echo h($equipo['nombRepEq'] ?? ''); ?></td>
-                            <td><?php echo h($equipo['numTelRepEq'] ?? ''); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-
-        </div>
-
-    </div>
-
-</body>
-</html>
-
+$controllerInstance->{$action}();

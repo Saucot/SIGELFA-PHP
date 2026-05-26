@@ -1,0 +1,779 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --g-500: #09a400;
+  --g-600: #078200;
+  --g-700: #056100;
+  --g-400: #2eb829;
+  --g-300: #6dd469;
+  --g-200: #b3edb1;
+  --g-100: #e4f9e3;
+  --g-50:  #f2fcf2;
+  --neutral-900: #111214;
+  --neutral-800: #1e2124;
+  --neutral-700: #2f3337;
+  --neutral-600: #454a50;
+  --neutral-500: #6b7280;
+  --neutral-400: #9ca3af;
+  --neutral-300: #d1d5db;
+  --neutral-200: #e9ebee;
+  --neutral-100: #f4f5f7;
+  --neutral-50:  #f8f9fa;
+  --bg-app:   #f0f2f5;
+  --bg-card:  #ffffff;
+  --bg-sidebar: #141619;
+  --text-primary: #111214;
+  --text-secondary: #454a50;
+  --text-muted: #9ca3af;
+  --border: #e9ebee;
+  --border-strong: #d1d5db;
+  --red-500: #e53e3e; --red-100: #fff5f5;
+  --amber-500: #d97706; --amber-100: #fffbeb;
+  --blue-500: #2563eb; --blue-100: #eff6ff;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,.04);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,.06), 0 2px 4px -1px rgba(0,0,0,.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.07), 0 4px 6px -2px rgba(0,0,0,.04);
+  --radius-xs: 4px; --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px;
+  --transition: 150ms cubic-bezier(.4,0,.2,1);
+  --font: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg-app); color: var(--text-primary); font-size: 14px; line-height: 1.5; }
+
+/* ── NAV TABS ─────────────────────────────── */
+.ds-nav { display: flex; gap: 2px; background: var(--border); padding: 3px; border-radius: var(--radius-md); margin-bottom: 24px; }
+.ds-tab { flex: 1; padding: 7px 10px; border: none; border-radius: var(--radius-sm); background: transparent; font-family: var(--font); font-size: 12px; font-weight: 500; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); white-space: nowrap; }
+.ds-tab:hover { background: rgba(255,255,255,.7); color: var(--text-primary); }
+.ds-tab.active { background: #fff; color: var(--text-primary); box-shadow: var(--shadow-xs); }
+
+/* ── SECTIONS ─────────────────────────────── */
+.section { display: none; } .section.active { display: block; }
+.section-title { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; margin-top: 24px; }
+.section-title:first-child { margin-top: 0; }
+
+/* ── COLOR SWATCHES ──────────────────────── */
+.palette-row { display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.swatch { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.swatch-block { width: 44px; height: 36px; border-radius: var(--radius-sm); border: 1px solid rgba(0,0,0,.06); }
+.swatch span { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); }
+
+/* ── TYPE SPECIMENS ──────────────────────── */
+.type-specimen { margin-bottom: 10px; padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); }
+.type-label { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; }
+
+/* ── TOKEN TABLE ─────────────────────────── */
+.token-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.token-table th { text-align: left; padding: 6px 10px; background: var(--neutral-100); font-weight: 500; color: var(--text-secondary); border-bottom: 1px solid var(--border); font-size: 11px; }
+.token-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+.token-table tr:last-child td { border-bottom: none; }
+.token-preview { width: 24px; height: 24px; border-radius: var(--radius-xs); border: 1px solid rgba(0,0,0,.08); display: inline-block; vertical-align: middle; margin-right: 6px; }
+
+/* ── COMPONENT DEMOS ─────────────────────── */
+.demo-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; height: 34px; border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; font-weight: 500; cursor: pointer; transition: all var(--transition); border: 1px solid transparent; white-space: nowrap; }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--g-500); color: #fff; border-color: var(--g-600); }
+.btn-primary:hover { background: var(--g-600); box-shadow: 0 0 0 3px rgba(9,164,0,.15); }
+.btn-secondary { background: var(--bg-card); color: var(--text-primary); border-color: var(--border-strong); }
+.btn-secondary:hover { background: var(--neutral-100); border-color: var(--neutral-400); }
+.btn-ghost { background: transparent; color: var(--g-600); border-color: transparent; }
+.btn-ghost:hover { background: var(--g-100); }
+.btn-danger { background: var(--red-100); color: var(--red-500); border-color: #fca5a5; }
+.btn-danger:hover { background: #fee2e2; }
+.btn-sm { height: 28px; padding: 0 10px; font-size: 12px; border-radius: var(--radius-xs); }
+.btn-icon { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); background: transparent; border: 1px solid var(--border-strong); color: var(--text-secondary); cursor: pointer; transition: all var(--transition); font-size: 14px; }
+.btn-icon:hover { background: var(--neutral-100); color: var(--text-primary); }
+.btn-icon.danger:hover { background: var(--red-100); color: var(--red-500); border-color: #fca5a5; }
+
+/* BADGES */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 100px; font-size: 11px; font-weight: 500; }
+.badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.badge-green { background: var(--g-100); color: var(--g-700); }
+.badge-red { background: var(--red-100); color: var(--red-500); }
+.badge-amber { background: var(--amber-100); color: var(--amber-500); }
+.badge-blue { background: var(--blue-100); color: var(--blue-500); }
+.badge-neutral { background: var(--neutral-100); color: var(--neutral-600); }
+
+/* INPUTS */
+.input-group { display: flex; flex-direction: column; gap: 4px; }
+.label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.input { height: 36px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; color: var(--text-primary); background: var(--bg-card); transition: all var(--transition); width: 100%; outline: none; }
+.input:hover { border-color: var(--neutral-400); }
+.input:focus { border-color: var(--g-500); box-shadow: 0 0 0 3px rgba(9,164,0,.12); }
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.select { height: 36px; padding: 0 30px 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; color: var(--text-primary); background: var(--bg-card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; appearance: none; outline: none; transition: all var(--transition); }
+.select:focus { border-color: var(--g-500); box-shadow: 0 0 0 3px rgba(9,164,0,.12); }
+
+/* CARDS */
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-sm); }
+.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* STAT CARDS */
+.stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; box-shadow: var(--shadow-sm); }
+.stat-card .stat-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.stat-card .stat-value { font-size: 26px; font-weight: 600; color: var(--text-primary); line-height: 1; margin-bottom: 4px; }
+.stat-card .stat-delta { font-size: 11px; }
+.delta-up { color: var(--g-600); }
+.delta-down { color: var(--red-500); }
+.stat-accent { border-left: 3px solid var(--g-500); padding-left: 13px; }
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+/* TABLE */
+.table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+.table-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.table-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.table-actions { display: flex; gap: 6px; align-items: center; }
+.search-input { height: 30px; padding: 0 10px 0 30px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font); font-size: 12px; color: var(--text-primary); background: var(--neutral-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center; outline: none; transition: all var(--transition); width: 160px; }
+.search-input:focus { border-color: var(--g-500); box-shadow: 0 0 0 2px rgba(9,164,0,.1); width: 200px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { padding: 9px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; background: var(--neutral-50); border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-primary); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background var(--transition); }
+tbody tr:hover { background: var(--g-50); }
+.td-actions { display: flex; gap: 4px; }
+.avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--g-100); display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--g-700); margin-right: 6px; vertical-align: middle; border: 1.5px solid var(--g-200); }
+
+/* ALERT */
+.alert { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid; margin-bottom: 8px; font-size: 12px; }
+.alert-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+.alert-success { background: var(--g-50); border-color: var(--g-200); color: var(--g-700); }
+.alert-danger { background: var(--red-100); border-color: #fca5a5; color: #991b1b; }
+.alert-warning { background: var(--amber-100); border-color: #fcd34d; color: #92400e; }
+.alert-info { background: var(--blue-100); border-color: #bfdbfe; color: #1e40af; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 40px 20px; }
+.empty-icon { font-size: 32px; margin-bottom: 10px; opacity: .3; }
+.empty-title { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+.empty-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+
+/* SIDEBAR PREVIEW */
+.layout-preview { border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); background: var(--bg-app); }
+.sidebar-preview { background: var(--bg-sidebar); width: 200px; flex-shrink: 0; padding: 0; display: flex; flex-direction: column; }
+.sidebar-logo { padding: 16px; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; align-items: center; gap: 8px; }
+.sidebar-logo-mark { width: 28px; height: 28px; background: var(--g-500); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; letter-spacing: -.5px; }
+.sidebar-logo-text { font-size: 13px; font-weight: 600; color: #fff; }
+.sidebar-logo-sub { font-size: 10px; color: rgba(255,255,255,.35); }
+.sidebar-section { padding: 16px 8px 6px; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.25); padding-left: 12px; }
+.sidebar-item { display: flex; align-items: center; gap: 9px; padding: 8px 12px; margin: 1px 6px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 400; color: rgba(255,255,255,.55); cursor: pointer; transition: all var(--transition); }
+.sidebar-item:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.85); }
+.sidebar-item.active { background: rgba(9,164,0,.2); color: var(--g-400); font-weight: 500; }
+.sidebar-item.active .si-dot { background: var(--g-400); }
+.si-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.2); flex-shrink: 0; }
+.topbar-preview { background: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 52px; flex-shrink: 0; box-shadow: var(--shadow-xs); }
+.topbar-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+.topbar-breadcrumb .current { color: var(--text-primary); font-weight: 500; }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+.topbar-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--g-500); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; }
+.topbar-notif { position: relative; }
+.notif-dot { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: var(--red-500); border-radius: 50%; border: 2px solid var(--bg-card); }
+.main-preview { flex: 1; padding: 16px; min-width: 0; overflow: hidden; }
+.layout-row { display: flex; height: 380px; }
+
+/* LOGIN PREVIEW */
+.login-preview { background: linear-gradient(135deg, #0e1012 0%, #141619 60%, #0a1a09 100%); padding: 24px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-lg); min-height: 320px; position: relative; overflow: hidden; }
+.login-preview::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(9,164,0,.12) 0%, transparent 60%); }
+.login-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius-xl); padding: 28px; width: 280px; backdrop-filter: blur(20px); position: relative; z-index: 1; }
+.login-logo { text-align: center; margin-bottom: 20px; }
+.login-logo-mark { width: 40px; height: 40px; background: var(--g-500); border-radius: var(--radius-md); display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; box-shadow: 0 4px 14px rgba(9,164,0,.35); }
+.login-title { font-size: 16px; font-weight: 600; color: #fff; }
+.login-sub { font-size: 11px; color: rgba(255,255,255,.35); }
+.login-label { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.45); margin-bottom: 4px; display: block; }
+.login-input { width: 100%; height: 36px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius-sm); padding: 0 12px; color: #fff; font-family: var(--font); font-size: 13px; outline: none; transition: all var(--transition); margin-bottom: 10px; }
+.login-input:focus { border-color: var(--g-500); box-shadow: 0 0 0 3px rgba(9,164,0,.2); }
+.login-btn { width: 100%; height: 36px; background: var(--g-500); color: #fff; border: none; border-radius: var(--radius-sm); font-family: var(--font); font-size: 13px; font-weight: 600; cursor: pointer; transition: all var(--transition); box-shadow: 0 2px 8px rgba(9,164,0,.3); letter-spacing: .02em; }
+.login-btn:hover { background: var(--g-600); box-shadow: 0 4px 12px rgba(9,164,0,.4); }
+
+/* PAGINATION */
+.pagination { display: flex; align-items: center; gap: 3px; padding: 10px 16px; border-top: 1px solid var(--border); }
+.page-btn { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-xs); border: none; background: transparent; font-family: var(--font); font-size: 12px; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); }
+.page-btn:hover { background: var(--neutral-100); }
+.page-btn.active { background: var(--g-500); color: #fff; font-weight: 600; }
+.page-info { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+
+/* MODAL */
+.modal-overlay { background: rgba(17,18,20,.45); border-radius: var(--radius-lg); padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 280px; }
+.modal { background: var(--bg-card); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,.06); width: 100%; max-width: 340px; overflow: hidden; }
+.modal-head { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 14px; font-weight: 600; }
+.modal-body { padding: 16px; }
+.modal-foot { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+
+/* FORM */
+.form-preview { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+.form-head { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.form-head h3 { font-size: 13px; font-weight: 600; }
+.form-head p { font-size: 11px; color: var(--text-muted); }
+.form-body { padding: 16px; }
+.form-section { font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; margin-top: 14px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.form-section:first-child { margin-top: 0; }
+.form-foot { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; background: var(--neutral-50); }
+
+/* SKELETON */
+@keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+.skeleton { background: linear-gradient(90deg, var(--neutral-200) 25%, var(--neutral-100) 50%, var(--neutral-200) 75%); background-size: 800px 100%; animation: shimmer 1.5s infinite; border-radius: var(--radius-sm); }
+
+/* CARD ENTRY ANIMATION */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.anim-card { animation: fadeUp .35s cubic-bezier(.4,0,.2,1) both; }
+.anim-card:nth-child(1) { animation-delay: .05s; }
+.anim-card:nth-child(2) { animation-delay: .10s; }
+.anim-card:nth-child(3) { animation-delay: .15s; }
+.anim-card:nth-child(4) { animation-delay: .20s; }
+
+hr.divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.tag { display: inline-flex; align-items: center; gap: 4px; background: var(--neutral-100); color: var(--text-secondary); padding: 2px 8px; border-radius: var(--radius-xs); font-size: 11px; font-weight: 500; }
+
+.chevron { font-size: 10px; color: var(--text-muted); }
+</style>
+
+<div style="padding: 16px; max-width: 680px;">
+
+  <div style="margin-bottom: 20px;">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+      <div style="width:32px;height:32px;background:var(--g-500);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(9,164,0,.3);">SG</div>
+      <div>
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.3px;">SIGELFA</div>
+        <div style="font-size:10px;color:var(--text-muted);letter-spacing:.05em;text-transform:uppercase;">Design System · Base Visual</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="ds-nav">
+    <button class="ds-tab active" onclick="showTab('colores')">Colores</button>
+    <button class="ds-tab" onclick="showTab('tipo')">Tipografía</button>
+    <button class="ds-tab" onclick="showTab('tokens')">Tokens</button>
+    <button class="ds-tab" onclick="showTab('componentes')">Componentes</button>
+    <button class="ds-tab" onclick="showTab('layout')">Layout</button>
+    <button class="ds-tab" onclick="showTab('pantallas')">Pantallas</button>
+  </nav>
+
+  <!-- COLORES -->
+  <div class="section active" id="tab-colores">
+    <p class="section-title">Color principal — Identidad</p>
+    <div class="palette-row">
+      <div class="swatch"><div class="swatch-block" style="background:#056100;"></div><span>700</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#078200;"></div><span>600</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#09a400;border:none;box-shadow:0 0 0 2px #09a400,0 0 0 4px rgba(9,164,0,.3);"></div><span>500 ✦</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#2eb829;"></div><span>400</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#6dd469;"></div><span>300</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#b3edb1;"></div><span>200</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#e4f9e3;"></div><span>100</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#f2fcf2;"></div><span>50</span></div>
+    </div>
+
+    <p class="section-title" style="margin-top:16px;">Neutros</p>
+    <div class="palette-row">
+      <div class="swatch"><div class="swatch-block" style="background:#111214;"></div><span>900</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#1e2124;"></div><span>800</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#2f3337;"></div><span>700</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#454a50;"></div><span>600</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#6b7280;"></div><span>500</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#9ca3af;"></div><span>400</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#d1d5db;"></div><span>300</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#e9ebee;"></div><span>200</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#f4f5f7;"></div><span>100</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#f8f9fa;border:1px solid #e9ebee;"></div><span>50 ✦</span></div>
+    </div>
+
+    <p class="section-title" style="margin-top:16px;">Semánticos</p>
+    <div class="palette-row">
+      <div class="swatch"><div class="swatch-block" style="background:#09a400;"></div><span>Success</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#d97706;"></div><span>Warning</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#e53e3e;"></div><span>Danger</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#2563eb;"></div><span>Info</span></div>
+    </div>
+
+    <p class="section-title" style="margin-top:16px;">Superficies</p>
+    <div class="palette-row">
+      <div class="swatch"><div class="swatch-block" style="background:#f0f2f5;border:1px solid #e9ebee;"></div><span>App BG</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#ffffff;border:1px solid #e9ebee;"></div><span>Card</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#141619;"></div><span>Sidebar</span></div>
+      <div class="swatch"><div class="swatch-block" style="background:#f8f9fa;border:1px solid #e9ebee;"></div><span>Row BG</span></div>
+    </div>
+
+    <div style="background:var(--g-100);border:1px solid var(--g-200);border-radius:var(--radius-md);padding:10px 12px;margin-top:14px;font-size:12px;color:var(--g-700);">
+      <strong>Regla de uso:</strong> El verde #09a400 solo en: CTA primario, sidebar activo, acent de stat cards, badges Activo, bordes de focus, e íconos de acción principal. En superficie clara usar con respaldo en g-50/g-100.
+    </div>
+  </div>
+
+  <!-- TIPOGRAFÍA -->
+  <div class="section" id="tab-tipo">
+    <p class="section-title">Sistema tipográfico — DM Sans</p>
+
+    <div class="type-specimen">
+      <div class="type-label">Display · 24px / 700 · Titulares de página</div>
+      <div style="font-size:24px;font-weight:700;letter-spacing:-.4px;color:var(--text-primary);">Gestión de Equipos</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">H1 · 20px / 600 · Títulos de sección</div>
+      <div style="font-size:20px;font-weight:600;letter-spacing:-.3px;">Dashboard General</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">H2 · 16px / 600 · Subtítulos de card</div>
+      <div style="font-size:16px;font-weight:600;">Estadísticas del Torneo</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">H3 · 14px / 600 · Encabezados de tabla</div>
+      <div style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);">Jugadores Registrados</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Body · 14px / 400 · Texto general</div>
+      <div style="font-size:14px;color:var(--text-secondary);">El sistema gestiona partidos, árbitros, cédulas y reportes de la liga amateur con precisión y claridad.</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Caption · 12px / 400 · Metadatos, ayudas</div>
+      <div style="font-size:12px;color:var(--text-muted);">Última actualización: hace 3 minutos · Jornada 7 de 14</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Mono · DM Mono 12px · Códigos, IDs</div>
+      <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);">#JUG-2024-00847 · ID: 3f7a9c</div>
+    </div>
+    <div class="type-specimen">
+      <div class="type-label">Label · 12px / 500 · Labels de formulario</div>
+      <div style="font-size:12px;font-weight:500;color:var(--text-secondary);">Nombre del jugador *</div>
+    </div>
+
+    <div style="background:var(--neutral-50);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 12px;margin-top:12px;font-size:12px;color:var(--text-secondary);">
+      <strong>Google Fonts:</strong> <code style="font-family:var(--font-mono);">DM Sans</code> (300, 400, 500, 600) + <code style="font-family:var(--font-mono);">DM Mono</code> (400, 500). Alternativas: Outfit, Plus Jakarta Sans. Nunca: Inter puro, Roboto, Arial.
+    </div>
+  </div>
+
+  <!-- TOKENS -->
+  <div class="section" id="tab-tokens">
+    <p class="section-title">Spacing Scale</p>
+    <div style="display:flex;gap:6px;align-items:flex-end;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="text-align:center;"><div style="width:4px;height:4px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">4</span></div>
+      <div style="text-align:center;"><div style="width:8px;height:8px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">8</span></div>
+      <div style="text-align:center;"><div style="width:12px;height:12px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">12</span></div>
+      <div style="text-align:center;"><div style="width:16px;height:16px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">16</span></div>
+      <div style="text-align:center;"><div style="width:20px;height:20px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">20</span></div>
+      <div style="text-align:center;"><div style="width:24px;height:24px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">24</span></div>
+      <div style="text-align:center;"><div style="width:32px;height:32px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">32</span></div>
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">40</span></div>
+      <div style="text-align:center;"><div style="width:48px;height:48px;background:var(--g-500);border-radius:1px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">48</span></div>
+    </div>
+
+    <p class="section-title">Border Radius</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--neutral-200);border-radius:4px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">xs·4</span></div>
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--neutral-200);border-radius:6px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">sm·6</span></div>
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--neutral-200);border-radius:8px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">md·8</span></div>
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--neutral-200);border-radius:12px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">lg·12</span></div>
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--neutral-200);border-radius:16px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">xl·16</span></div>
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--neutral-200);border-radius:24px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">2xl·24</span></div>
+      <div style="text-align:center;"><div style="width:40px;height:40px;background:var(--neutral-200);border-radius:9999px;margin:0 auto 3px;"></div><span style="font-size:10px;color:var(--text-muted);">full</span></div>
+    </div>
+
+    <p class="section-title">Sombras</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+      <div style="width:64px;height:48px;background:#fff;border-radius:var(--radius-md);box-shadow:0 1px 2px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;"><span style="font-size:10px;color:var(--text-muted);">xs</span></div>
+      <div style="width:64px;height:48px;background:#fff;border-radius:var(--radius-md);box-shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;"><span style="font-size:10px;color:var(--text-muted);">sm</span></div>
+      <div style="width:64px;height:48px;background:#fff;border-radius:var(--radius-md);box-shadow:0 4px 6px -1px rgba(0,0,0,.06),0 2px 4px -1px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;"><span style="font-size:10px;color:var(--text-muted);">md</span></div>
+      <div style="width:64px;height:48px;background:#fff;border-radius:var(--radius-md);box-shadow:0 10px 15px -3px rgba(0,0,0,.07),0 4px 6px -2px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;"><span style="font-size:10px;color:var(--text-muted);">lg</span></div>
+    </div>
+
+    <p class="section-title">Transiciones</p>
+    <div class="card" style="font-size:12px;font-family:var(--font-mono);color:var(--text-secondary);line-height:2;">
+      --transition: 150ms cubic-bezier(.4, 0, .2, 1);<br>
+      --transition-slow: 250ms cubic-bezier(.4, 0, .2, 1);<br>
+      --transition-spring: 300ms cubic-bezier(.34, 1.56, .64, 1);
+    </div>
+
+    <p class="section-title" style="margin-top:14px;">Alturas estándar</p>
+    <table class="token-table" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;">
+      <thead><tr><th>Elemento</th><th>Altura</th><th>Padding H</th><th>Font</th></tr></thead>
+      <tbody>
+        <tr><td>Input / Select</td><td>36px</td><td>12px</td><td>13px</td></tr>
+        <tr><td>Btn primario</td><td>34px</td><td>14px</td><td>13px / 500</td></tr>
+        <tr><td>Btn pequeño</td><td>28px</td><td>10px</td><td>12px / 500</td></tr>
+        <tr><td>Topbar</td><td>52px</td><td>20px</td><td>—</td></tr>
+        <tr><td>Fila de tabla</td><td>46px</td><td>16px</td><td>13px</td></tr>
+        <tr><td>Sidebar item</td><td>36px</td><td>12px</td><td>13px</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- COMPONENTES -->
+  <div class="section" id="tab-componentes">
+    <p class="section-title">Botones</p>
+    <div class="demo-row">
+      <button class="btn btn-primary">Guardar cambios</button>
+      <button class="btn btn-secondary">Cancelar</button>
+      <button class="btn btn-ghost">Ver más</button>
+      <button class="btn btn-danger">Eliminar</button>
+    </div>
+    <div class="demo-row">
+      <button class="btn btn-primary btn-sm">Agregar</button>
+      <button class="btn btn-secondary btn-sm">Exportar</button>
+      <button class="btn btn-ghost btn-sm">Filtros</button>
+    </div>
+    <div class="demo-row">
+      <button class="btn-icon" title="Editar">✏️</button>
+      <button class="btn-icon danger" title="Eliminar">🗑</button>
+      <button class="btn-icon" title="Ver">👁</button>
+      <button class="btn-icon" title="Más">⋯</button>
+    </div>
+
+    <p class="section-title">Badges de estado</p>
+    <div class="demo-row">
+      <span class="badge badge-green">Activo</span>
+      <span class="badge badge-red">Inactivo</span>
+      <span class="badge badge-amber">Programado</span>
+      <span class="badge badge-blue">En curso</span>
+      <span class="badge badge-neutral">Finalizado</span>
+    </div>
+    <div class="demo-row">
+      <span class="badge badge-green">Jugado</span>
+      <span class="badge badge-amber">Suspendido</span>
+      <span class="badge badge-red">Cancelado</span>
+      <span class="badge badge-blue">Aperturado</span>
+      <span class="badge badge-neutral">Borrador</span>
+    </div>
+
+    <p class="section-title">Inputs y formulario</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label class="label">Nombre del equipo *</label>
+        <input class="input" type="text" placeholder="Ej. FC Deportivo Torreón">
+      </div>
+      <div class="input-group">
+        <label class="label">Categoría</label>
+        <select class="select">
+          <option>Selecciona...</option>
+          <option>Sub-17</option>
+          <option>Sub-20</option>
+          <option>Libre</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label class="label">Entrenador</label>
+        <input class="input" type="text" placeholder="Nombre completo">
+      </div>
+      <div class="input-group">
+        <label class="label">Número de camiseta</label>
+        <input class="input" type="number" placeholder="10">
+      </div>
+    </div>
+
+    <p class="section-title">Alertas</p>
+    <div class="alert alert-success"><span class="alert-icon">✓</span><div><strong>Guardado correctamente.</strong> Los cambios han sido registrados en el sistema.</div></div>
+    <div class="alert alert-warning"><span class="alert-icon">⚠</span><div><strong>Atención:</strong> El partido no tiene árbitro asignado todavía.</div></div>
+    <div class="alert alert-danger"><span class="alert-icon">✕</span><div><strong>Error:</strong> No se pudo guardar. Verifica los campos requeridos.</div></div>
+    <div class="alert alert-info"><span class="alert-icon">ℹ</span><div>La jornada 8 comienza el próximo sábado a las 10:00 AM.</div></div>
+
+    <p class="section-title">Stat Cards</p>
+    <div class="stat-grid">
+      <div class="stat-card stat-accent anim-card">
+        <div class="stat-label">Equipos</div>
+        <div class="stat-value">24</div>
+        <div class="stat-delta delta-up">↑ 2 nuevos este mes</div>
+      </div>
+      <div class="stat-card anim-card">
+        <div class="stat-label">Jugadores</div>
+        <div class="stat-value">312</div>
+        <div class="stat-delta delta-up">↑ 18 registrados</div>
+      </div>
+      <div class="stat-card anim-card">
+        <div class="stat-label">Partidos</div>
+        <div class="stat-value">87</div>
+        <div class="stat-delta" style="color:var(--text-muted);">Temporada activa</div>
+      </div>
+      <div class="stat-card anim-card">
+        <div class="stat-label">Árbitros</div>
+        <div class="stat-value">9</div>
+        <div class="stat-delta delta-down">↓ 1 suspendido</div>
+      </div>
+    </div>
+
+    <p class="section-title">Estado vacío</p>
+    <div class="table-wrap" style="margin-bottom:0;">
+      <div class="empty-state">
+        <div class="empty-icon">📋</div>
+        <div class="empty-title">Sin cédulas registradas</div>
+        <div class="empty-desc">Aún no hay cédulas arbitrales en este partido.</div>
+        <button class="btn btn-primary btn-sm">Crear cédula</button>
+      </div>
+    </div>
+
+    <p class="section-title">Carga — Skeleton</p>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;box-shadow:var(--shadow-sm);">
+      <div class="skeleton" style="height:12px;width:40%;margin-bottom:10px;"></div>
+      <div class="skeleton" style="height:28px;width:25%;margin-bottom:8px;"></div>
+      <div class="skeleton" style="height:10px;width:55%;"></div>
+    </div>
+
+    <p class="section-title">Modal</p>
+    <div class="modal-overlay">
+      <div class="modal">
+        <div class="modal-head">
+          <div class="modal-title">Confirmar eliminación</div>
+          <button class="btn-icon" style="width:24px;height:24px;font-size:12px;border:none;color:var(--text-muted);">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size:13px;color:var(--text-secondary);">¿Estás seguro de eliminar al jugador <strong>Carlos Ramírez</strong>? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-secondary btn-sm">Cancelar</button>
+          <button class="btn btn-danger btn-sm">Eliminar jugador</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="section" id="tab-layout">
+    <p class="section-title">Estructura base — Sidebar + Topbar + Main</p>
+    <div class="layout-preview">
+      <div class="layout-row">
+        <!-- Sidebar -->
+        <div class="sidebar-preview">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-mark">SG</div>
+            <div>
+              <div class="sidebar-logo-text">SIGELFA</div>
+              <div class="sidebar-logo-sub">Liga Amateur</div>
+            </div>
+          </div>
+          <div class="sidebar-section">Principal</div>
+          <div class="sidebar-item active"><div class="si-dot"></div>Dashboard</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Torneos</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Jornadas</div>
+          <div class="sidebar-section">Gestión</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Equipos</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Jugadores</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Árbitros</div>
+          <div class="sidebar-section">Operación</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Partidos</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Cédulas</div>
+          <div class="sidebar-item"><div class="si-dot"></div>Reportes</div>
+        </div>
+        <!-- Main area -->
+        <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+          <!-- Topbar -->
+          <div class="topbar-preview">
+            <div class="topbar-breadcrumb">
+              <span>SIGELFA</span>
+              <span class="chevron">›</span>
+              <span class="current">Dashboard</span>
+            </div>
+            <div class="topbar-actions">
+              <div class="topbar-notif">
+                <button class="btn-icon" style="font-size:16px;border:none;">🔔</button>
+                <div class="notif-dot"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;">
+                <div class="topbar-avatar" style="width:24px;height:24px;font-size:10px;">AD</div>
+                <span style="font-size:12px;font-weight:500;color:var(--text-primary);">Admin</span>
+              </div>
+            </div>
+          </div>
+          <!-- Page content -->
+          <div class="main-preview" style="overflow-y:auto;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <div>
+                <div style="font-size:16px;font-weight:700;letter-spacing:-.2px;">Dashboard</div>
+                <div style="font-size:11px;color:var(--text-muted);">Temporada 2024 · Activa</div>
+              </div>
+              <button class="btn btn-primary btn-sm">+ Nuevo partido</button>
+            </div>
+            <div class="stat-grid" style="margin-bottom:12px;">
+              <div class="stat-card stat-accent anim-card" style="padding:10px 12px;">
+                <div class="stat-label" style="font-size:9px;">Equipos</div>
+                <div class="stat-value" style="font-size:20px;">24</div>
+              </div>
+              <div class="stat-card anim-card" style="padding:10px 12px;">
+                <div class="stat-label" style="font-size:9px;">Jugadores</div>
+                <div class="stat-value" style="font-size:20px;">312</div>
+              </div>
+              <div class="stat-card anim-card" style="padding:10px 12px;">
+                <div class="stat-label" style="font-size:9px;">Partidos</div>
+                <div class="stat-value" style="font-size:20px;">87</div>
+              </div>
+              <div class="stat-card anim-card" style="padding:10px 12px;">
+                <div class="stat-label" style="font-size:9px;">Árbitros</div>
+                <div class="stat-value" style="font-size:20px;">9</div>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <div class="table-header">
+                <div class="table-title">Próximos partidos</div>
+              </div>
+              <table>
+                <thead><tr><th>Jornada</th><th>Equipos</th><th>Estado</th></tr></thead>
+                <tbody>
+                  <tr><td style="font-family:var(--font-mono);font-size:11px;">J8</td><td style="font-size:12px;">Rápidos FC vs. Los Toros</td><td><span class="badge badge-amber" style="font-size:10px;">Programado</span></td></tr>
+                  <tr><td style="font-family:var(--font-mono);font-size:11px;">J8</td><td style="font-size:12px;">Águilas vs. Estrellas</td><td><span class="badge badge-blue" style="font-size:10px;">En curso</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title" style="margin-top:16px;">Tabla administrativa completa</p>
+    <div class="table-wrap">
+      <div class="table-header">
+        <div class="table-title">Jugadores registrados</div>
+        <div class="table-actions">
+          <input class="search-input" type="text" placeholder="Buscar jugador...">
+          <button class="btn btn-secondary btn-sm">Filtros</button>
+          <button class="btn btn-primary btn-sm">+ Agregar</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Jugador</th>
+            <th>Equipo</th>
+            <th># Camiseta</th>
+            <th>Posición</th>
+            <th>Estado</th>
+            <th style="text-align:center;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="avatar">CR</span><span style="font-weight:500;">Carlos Ramírez</span></td>
+            <td style="color:var(--text-secondary);">Rápidos FC</td>
+            <td style="font-family:var(--font-mono);">10</td>
+            <td><span class="tag">Delantero</span></td>
+            <td><span class="badge badge-green">Activo</span></td>
+            <td><div class="td-actions" style="justify-content:center;"><button class="btn-icon" style="font-size:12px;">👁</button><button class="btn-icon" style="font-size:12px;">✏️</button><button class="btn-icon danger" style="font-size:12px;">🗑</button></div></td>
+          </tr>
+          <tr>
+            <td><span class="avatar" style="background:var(--blue-100);color:#1e40af;border-color:#bfdbfe;">MT</span><span style="font-weight:500;">Marco Torres</span></td>
+            <td style="color:var(--text-secondary);">Los Toros</td>
+            <td style="font-family:var(--font-mono);">7</td>
+            <td><span class="tag">Mediocampista</span></td>
+            <td><span class="badge badge-green">Activo</span></td>
+            <td><div class="td-actions" style="justify-content:center;"><button class="btn-icon" style="font-size:12px;">👁</button><button class="btn-icon" style="font-size:12px;">✏️</button><button class="btn-icon danger" style="font-size:12px;">🗑</button></div></td>
+          </tr>
+          <tr>
+            <td><span class="avatar" style="background:var(--amber-100);color:#92400e;border-color:#fcd34d;">JL</span><span style="font-weight:500;">Juan López</span></td>
+            <td style="color:var(--text-secondary);">Águilas</td>
+            <td style="font-family:var(--font-mono);">1</td>
+            <td><span class="tag">Portero</span></td>
+            <td><span class="badge badge-red">Inactivo</span></td>
+            <td><div class="td-actions" style="justify-content:center;"><button class="btn-icon" style="font-size:12px;">👁</button><button class="btn-icon" style="font-size:12px;">✏️</button><button class="btn-icon danger" style="font-size:12px;">🗑</button></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination">
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">›</button>
+        <span class="page-info">Mostrando 1–3 de 312</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLAS -->
+  <div class="section" id="tab-pantallas">
+    <p class="section-title">Login Screen</p>
+    <div class="login-preview">
+      <div class="login-card">
+        <div class="login-logo">
+          <div class="login-logo-mark">SG</div>
+          <div class="login-title">SIGELFA</div>
+          <div class="login-sub">Sistema Gestor de Liga de Fútbol Amateur</div>
+        </div>
+        <label class="login-label">Correo electrónico</label>
+        <input class="login-input" type="email" placeholder="admin@liga.com">
+        <label class="login-label">Contraseña</label>
+        <input class="login-input" type="password" placeholder="••••••••">
+        <button class="login-btn">Iniciar sesión</button>
+        <div style="text-align:center;margin-top:10px;font-size:11px;color:rgba(255,255,255,.25);">¿Olvidaste tu contraseña?</div>
+      </div>
+    </div>
+
+    <p class="section-title">Formulario de alta/edición — Jugador</p>
+    <div class="form-preview">
+      <div class="form-head">
+        <h3>Registrar jugador</h3>
+        <p>Completa los datos para agregar un jugador al equipo</p>
+      </div>
+      <div class="form-body">
+        <div class="form-section">Información personal</div>
+        <div class="input-row">
+          <div class="input-group"><label class="label">Nombre(s) *</label><input class="input" type="text" placeholder="Carlos"></div>
+          <div class="input-group"><label class="label">Apellidos *</label><input class="input" type="text" placeholder="Ramírez Flores"></div>
+        </div>
+        <div class="input-row">
+          <div class="input-group"><label class="label">Fecha de nacimiento</label><input class="input" type="date"></div>
+          <div class="input-group"><label class="label">CURP</label><input class="input" type="text" placeholder="RAFC940312..."></div>
+        </div>
+        <div class="form-section">Datos deportivos</div>
+        <div class="input-row">
+          <div class="input-group"><label class="label">Equipo *</label><select class="select" style="width:100%;"><option>Selecciona equipo...</option><option>Rápidos FC</option><option>Los Toros</option></select></div>
+          <div class="input-group"><label class="label">Posición</label><select class="select" style="width:100%;"><option>Posición...</option><option>Portero</option><option>Defensa</option><option>Mediocampista</option><option>Delantero</option></select></div>
+        </div>
+        <div class="input-row">
+          <div class="input-group"><label class="label">Número de camiseta</label><input class="input" type="number" placeholder="10"></div>
+          <div class="input-group"><label class="label">Estado</label><select class="select" style="width:100%;"><option>Activo</option><option>Inactivo</option></select></div>
+        </div>
+      </div>
+      <div class="form-foot">
+        <button class="btn btn-secondary btn-sm">Cancelar</button>
+        <button class="btn btn-primary btn-sm">Guardar jugador</button>
+      </div>
+    </div>
+
+    <p class="section-title">Cédula Arbitral</p>
+    <div class="card" style="border-left:3px solid var(--g-500);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;">Cédula Arbitral #0847</div>
+          <div style="font-size:11px;color:var(--text-muted);">Jornada 7 · 18 May 2024 · 10:00 AM</div>
+        </div>
+        <span class="badge badge-amber">Aperturada</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-bottom:12px;background:var(--neutral-50);border-radius:var(--radius-md);padding:12px;">
+        <div style="text-align:center;">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px;">Local</div>
+          <div style="font-size:14px;font-weight:700;">Rápidos FC</div>
+          <div style="font-size:28px;font-weight:700;color:var(--g-600);margin-top:4px;">2</div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--text-muted);font-weight:600;letter-spacing:.06em;">VS</div>
+        <div style="text-align:center;">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:2px;">Visitante</div>
+          <div style="font-size:14px;font-weight:700;">Los Toros</div>
+          <div style="font-size:28px;font-weight:700;color:var(--neutral-700);margin-top:4px;">1</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;background:var(--neutral-50);border-radius:var(--radius-md);padding:10px;">
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Árbitro principal</div>
+          <div style="font-size:13px;font-weight:500;">Roberto Sánchez</div>
+        </div>
+        <div style="flex:1;background:var(--neutral-50);border-radius:var(--radius-md);padding:10px;">
+          <div style="font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Cancha</div>
+          <div style="font-size:13px;font-weight:500;">Campo Revolución</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.ds-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
